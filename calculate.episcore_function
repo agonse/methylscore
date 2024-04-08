@@ -1,0 +1,45 @@
+calculate.episcore=function(thrs.criteria='criteria_undefined',episcore="epiS_undefined")
+{
+  message("[===========================]")
+  message("[<<<< calculate.episcore START >>>>>]")
+  message("-----------------------------")
+  
+  beta=betat[betat$cpg %in% cpgms$cpg,]
+  beta=na.omit(beta)
+  
+  if (nrow(beta)<1 | nrow(cpgms)<1){
+    scorestring=rep("NA",times=ncol(betat)-1)
+    episcdummy <- data.frame(setNames(list(scorestring), episcore))
+    epi=cbind.data.frame(epi,episcdummy)
+    return(epi)
+    stop("No overlapping CpGs to create episcore")
+  }
+  
+  cpgms0=cpgms[cpgms$cpg %in% beta$cpg,]
+  cpgms0=cpgms0[match(beta$cpg,cpgms0$cpg),]
+  cpgms0$beta=scale(cpgms0$beta)
+  
+  scorestring = numeric()
+  for (j in 2:(ncol(beta))){
+    singleid=0
+    for (i in 1:nrow(cpgms0)){
+      singlecpg=cpgms0$beta[i]*beta[[i,j]]
+      singleid=singleid+singlecpg
+    }
+    scorestring=c(scorestring,singleid)
+  }
+  
+  episc <- data.frame(setNames(list(scorestring), episcore))
+  epi=cbind.data.frame(epi,episc)
+  
+  message(paste0("There are ", nrow(cpgms)," CpGs with ", thrs.criteria, " in the reference. ", 
+                 nrow(beta), "(", round(nrow(beta)/nrow(cpgms)*100,2), "%) CpGs are present in the beta matrix"))
+  message("-----------------------------")
+  message("[<<<< calculate.episcore END >>>>>]")
+  
+  return(epi)
+}
+
+
+
+
