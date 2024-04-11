@@ -1,7 +1,8 @@
-# methylscore
+#### methylscore ####
 Calculation of epigenetic scores using genome-wide methylation data
 
 
+DESCRIPTION
 #Methylation data of study sample
 The input containing the methylation information of the study sample requires the following format:
   - A column "cpg": contains all cpg site names, e.g. "cg04309214"
@@ -15,4 +16,3 @@ The input containing the size effect of CpGs retrieved from EWAS requires the fo
   - A column "beta": contais CpG effect sizes
   - A column "p": contains the associated p-value
 A dummy sumstats_test.txt is provided in the test directory
-
