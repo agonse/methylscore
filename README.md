@@ -18,4 +18,4 @@ The input containing the size effect of CpGs retrieved from EWAS requires the fo
 A dummy sumstats_test.txt is provided in the test directory
 
 ## Contact
-For any question, contact agonzalezsegura@ub.edu
+Should any questions arise, you can contact agonzalezsegura@ub.edu.
