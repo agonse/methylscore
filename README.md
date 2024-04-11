@@ -16,3 +16,6 @@ The input containing the size effect of CpGs retrieved from EWAS requires the fo
   - A column "beta": contais CpG effect sizes
   - A column "p": contains the associated p-value
 A dummy sumstats_test.txt is provided in the test directory
+
+## Contact
+For any question, contact agonzalezsegura@ub.edu
