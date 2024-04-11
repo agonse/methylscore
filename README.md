@@ -2,20 +2,20 @@
 Calculation of epigenetic scores using genome-wide methylation data
 
 ## DESCRIPTION
-The process requires two files as input data. A single outcome is provided
+The process requires two input files:
 
 ### Methylation data of study sample
-The input containing the methylation information of the study sample requires the following format:
-  - A column "cpg": contains all cpg site names, e.g. "cg04309214"
-  - A column for each individual reporting the QCed methylation beta for each site. Add ID code as column name.
-A dummy betamatrix_test.txt is provided in the test directory
+The input should have the following format:
+  - A column "cpg" containing all CpG site names (e.g., "cg04309214").
+  - Individual columns with QCed methylation beta values for each site, labeled with individual IDs.
+A sample file, betamatrix_test.txt, is included in the test directory.
 
 ### EWAS summary statistics
-The input containing the size effect of CpGs retrieved from EWAS requires the following format:
-  - A column "cpg": contains all cpg site names, e.g. "cg04309214"
-  - A column "beta": contais CpG effect sizes
-  - A column "p": contains the associated p-value
-A dummy sumstats_test.txt is provided in the test directory
+The input should have the following format:
+  - A column "cpg" containing all CpG site names (e.g., "cg04309214").
+  - A column "beta" containing CpG effect sizes.
+  - A column "p" containing associated p-values.
+A sample file, sumstats_test.txt, is included in the test directory.
 
 ## Contact
-Should any questions arise, you can contact agonzalezsegura@ub.edu.
+If you have any questions, please contact agonzalezsegura@ub.edu
