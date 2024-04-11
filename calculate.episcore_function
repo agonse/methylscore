@@ -65,7 +65,7 @@ calculate.episcore=function(thrs.criteria=0.05,ewas.file="methylscore/sumstats_t
 
   message("                 *****   Final Report      *****         ")
   message(paste0("  There are ", nrow(cpgms)," CpGs with p value <= ", thrs.criteria, " in the reference.\n"),
-          "   ",nrow(beta), "(", round(nrow(beta)/nrow(cpgms)*100,2), "%) CpGs are present in the beta matrix.\n")
+          "  ",nrow(beta), "(", round(nrow(beta)/nrow(cpgms)*100,2), "%) CpGs are present in the beta matrix.\n")
 
   message("╔══════════════════════════════════════════════════════════════╗")
   message("║                    calculate.episcore END                    ║")
