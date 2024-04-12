@@ -2,8 +2,10 @@
 #'
 #' This function calculates epigenetic scores using methylation information.
 #'
+#' @import readxl
+#' @import dplyr
 #' @param thrs.criteria Thresholding criteria for CpG selection.
-#' @param ewas.file Path and name of the EWAS file.
+#' @param ewas.file Path and name to the EWAS file.
 #' @param episcore.name Name for the episcore.
 #' @return The calculated episcore.
 #' @export
