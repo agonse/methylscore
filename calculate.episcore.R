@@ -5,55 +5,74 @@
 #' @import readxl
 #' @import dplyr
 #' @param thrs.criteria Thresholding criteria for CpG selection.
+#' @param beta Beta from sample CpG.
 #' @param ewas.file Path and name to the EWAS file.
-#' @param episcore.name Name for the episcore.
+#' @param missingness Maximum tolerated missing data for CpG sites.
 #' @return The calculated episcore.
 #' @export
-calculate.episcore=function(thrs.criteria=0.05,ewas.file="methylscore/sumstats_test.txt",episcore.name="undefined_episcore")
+calculate.episcore=function(thrs.criteria=0.05,
+                            beta="methylscore/betamatrix_test.txt",
+                            ewas.file="methylscore/sumstats_test.txt",
+                            missingess=0.20)
 {
   message("╔══════════════════════════════════════════════════════════════╗")
   message("║                  calculate.episcore START                    ║")
   message("╚══════════════════════════════════════════════════════════════╝")
-
-
   message("═= Step 1: load summary statistic file")
 
   file_ext <- tools::file_ext(ewas.file)
   if (file_ext == "xlsx") {
+    message("      Reading ", ewas.file)
     cpgms <- read_xlsx(ewas.file,col_names = TRUE)
   } else {
+    message("      Reading ", ewas.file)
     cpgms <- read.table(ewas.file,header = TRUE)
   }
-  message("      Reading .", file_ext, " file... Done!\n")
+  message("      Reading .", file_ext, " file... Done!")
+  message("      p value thresholding is set at ", thrs.criteria)
+  message("      Maximum p value provided by EWAS summary statistics is ", max(cpgms$p),"\n")
+  if (max(cpgms$p)<thrs.criteria){
+    message("      **CAUTION** Your thresholding criteria can include CpGs not provided by the EWAS summary statistics")
+    message("      Some CpGs may not be included in the episcore\n")
+  }
 
   message("═= Step 2: CpG selection")
 
   cpgms=cpgms%>%subset(p<=thrs.criteria)
-  beta=betat[betat$cpg %in% cpgms$cpg,]
-  beta=na.omit(beta)
 
-  epi=data.frame(id=colnames(betat)[-1])
+  if (!is.data.frame(beta)){
+    stop("      Error: The beta matrix must be provided as a data frame.")
+  }
+
+  beta0=beta[beta$cpg %in% cpgms$cpg,]
+  beta0=na.omit(beta0)
+
+  epi=data.frame(id=colnames(beta)[-1])
 
   if (nrow(beta)<1 | nrow(cpgms)<1){
     scorestring=rep("NA",times=ncol(betat)-1)
     episcdummy <- data.frame(setNames(list(scorestring), episcore))
     epi=cbind.data.frame(epi,episcdummy)
     return(epi)
-    stop("No available CpGs to create episcore")
+    stop("      Error: No available CpGs to create episcore")
+  } else if ((nrow(beta0)/nrow(cpgms)*100)<(1-missingess)){
+    stop("      Error: CpG missigness exceeds ", missingess)
   }
 
-  cpgms0=cpgms[cpgms$cpg %in% beta$cpg,]
-  cpgms0=cpgms0[match(beta$cpg,cpgms0$cpg),]
-  cpgms0$beta=scale(cpgms0$beta)
+  cpgms0=cpgms[cpgms$cpg %in% beta0$cpg,]
+  cpgms0=cpgms0[match(beta0$cpg,cpgms0$cpg),]
+  cpgms0$beta0=scale(cpgms0$beta)
 
-  message("      CpG selection ready\n")
+  message("      CpG selection... Ready!\n")
 
   message("═= Step 3: epigenetic score calculation")
+  episcore.name=tools::file_path_sans_ext(basename(ewas.file))
+  message("      ", episcore.name, " episcore will be calculated\n")
   scorestring = numeric()
-  for (j in 2:(ncol(beta))){
+  for (j in 2:(ncol(beta0))){
     singleid=0
     for (i in 1:nrow(cpgms0)){
-      singlecpg=cpgms0$beta[i]*beta[[i,j]]
+      singlecpg=cpgms0$beta[i]*beta0[[i,j]]
       singleid=singleid+singlecpg
     }
     scorestring=c(scorestring,singleid)
@@ -61,13 +80,15 @@ calculate.episcore=function(thrs.criteria=0.05,ewas.file="methylscore/sumstats_t
 
   episc <- data.frame(setNames(list(scorestring), episcore.name))
   episcore=cbind.data.frame(epi,episc)
+  colnames(episcore)=c(colnames(episcore)[1],episcorename)
 
   message("      Epigenetic score calculation complete\n")
 
 
   message("                 *****   Final Report      *****         ")
+  message("  episcore ",episcore.name," calculation successful.\n")
   message(paste0("  There are ", nrow(cpgms)," CpGs with p value <= ", thrs.criteria, " in the reference.\n"),
-          "  ",nrow(beta), "(", round(nrow(beta)/nrow(cpgms)*100,2), "%) CpGs are present in the beta matrix.\n")
+                  "  ",nrow(beta0), "(", round(nrow(beta0)/nrow(cpgms)*100,2), "%) CpGs are present in the beta matrix.\n")
 
   message("╔══════════════════════════════════════════════════════════════╗")
   message("║                    calculate.episcore END                    ║")
