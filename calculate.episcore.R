@@ -47,16 +47,16 @@ calculate.episcore=function(thrs.criteria=0.05,
   beta0=beta[beta$cpg %in% cpgms$cpg,]
   beta0=na.omit(beta0)
 
-  epi=data.frame(id=colnames(beta)[-1])
+  episcore.name=tools::file_path_sans_ext(basename(ewas.file))
 
-  if (nrow(beta)<1 | nrow(cpgms)<1){
-    scorestring=rep("NA",times=ncol(betat)-1)
-    episcdummy <- data.frame(setNames(list(scorestring), episcore))
+  if (nrow(beta0)<1 | nrow(cpgms)<1){
+    scorestring=rep("NA",times=ncol(beta0)-1)
+    episcdummy <- data.frame(setNames(list(scorestring), episcore.name))
     epi=cbind.data.frame(epi,episcdummy)
     return(epi)
     stop("      Error: No available CpGs to create episcore")
   } else if ((nrow(beta0)/nrow(cpgms)*100)<(1-missingess)){
-    stop("      Error: CpG missigness exceeds ", missingess)
+    message("      **CAUTION** CpG missigness exceeds ", missingess)
   }
 
   cpgms0=cpgms[cpgms$cpg %in% beta0$cpg,]
@@ -66,7 +66,6 @@ calculate.episcore=function(thrs.criteria=0.05,
   message("      CpG selection... Ready!\n")
 
   message("═= Step 3: epigenetic score calculation")
-  episcore.name=tools::file_path_sans_ext(basename(ewas.file))
   message("      ", episcore.name, " episcore will be calculated\n")
   scorestring = numeric()
   for (j in 2:(ncol(beta0))){
@@ -80,7 +79,7 @@ calculate.episcore=function(thrs.criteria=0.05,
 
   episc <- data.frame(setNames(list(scorestring), episcore.name))
   episcore=cbind.data.frame(epi,episc)
-  colnames(episcore)=c(colnames(episcore)[1],episcorename)
+  colnames(episcore)=c(colnames(episcore)[1],episcore.name)
 
   message("      Epigenetic score calculation complete\n")
 
