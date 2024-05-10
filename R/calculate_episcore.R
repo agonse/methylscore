@@ -6,7 +6,7 @@
 #' This function calculates an epigenetic score based on methylation data. Two inputs are required: a beta matrix with CpG methylation and an external reference with the association and effect values for each CpG
 #'
 #' @import readxl
-#' @import dplyr
+#' @importFrom dplyr first last between
 #' @import data.table
 #' @param thrs.criteria Thresholding criteria for CpG selection.
 #' @param beta Beta from sample CpG.
