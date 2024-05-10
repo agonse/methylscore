@@ -34,5 +34,16 @@ To install the `methylscore` package, use the following R command:
 devtools::install_github("alexgonse-farmaco/methylscore")
 ```
 
+## Testing
+
+After installing the `methylscore` package, you can test its functionality by running the included test script. This script uses example data files to perform basic operations provided by the package.
+
+To run the test script, use the following commands in R:
+
+```r
+source(system.file("scripts", "run_tests.R", package = "methylscore"))
+```
+
+
 ## Contact
 If you have any questions, please contact agonzalezsegura@ub.edu
