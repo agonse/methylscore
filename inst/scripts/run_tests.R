@@ -15,16 +15,3 @@ episcore <- calculate_episcore(
 
 # Print the results
 print(episcore)
-
-
-# Example 2: calculating multiple episcores
-episcore_mult <- calculate_multiple_episcores(
-    thrs.criteria = 0.05,
-    beta.file = beta_path,
-    ewas.list.path = sumstats_path,
-    missingness = 0.2,
-    path = getwd()
-)
-
-# Print the results
-print(episcore_mult)
