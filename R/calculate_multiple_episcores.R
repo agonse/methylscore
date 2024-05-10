@@ -15,8 +15,8 @@
 #' @export
 #'
 calculate_multiple_episcores <- function(thrs.criteria = 0.05,
-                                            beta.file = "betamatrix_test.txt",
-                                            ewas.list.path = "",
+                                            beta.file = "test/betamatrix_test.txt",
+                                            ewas.list.path = "test/sumstats/",
                                             missingness = 0.2,
                                             path = getwd()){
 

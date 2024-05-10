@@ -16,8 +16,8 @@
 #' @export
 #'
 calculate_episcore <- function(thrs.criteria = 0.05,
-                               beta.file = "betamatrix_test.txt",
-                               ewas.file = "sumstats_test.txt",
+                               beta.file = "test/betamatrix_test.txt",
+                               ewas.file = "test/sumstats_test.txt",
                                missingness = 0.2,
                                path = getwd()) {
 
