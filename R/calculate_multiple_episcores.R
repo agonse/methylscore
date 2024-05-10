@@ -8,14 +8,14 @@
 #' @import dplyr
 #' @param thrs.criteria Thresholding criteria for CpG selection.
 #' @param beta Beta from sample CpG.
-#' @param ewas.file Path and name to the list of EWAS files.
+#' @param ewas.file Path to the list of EWAS files.
 #' @param missingness Maximum tolerated missing data for CpG sites.
 #' @return The calculated episcore.
 #' @export
 #'
 calculate_multiple_episcores <- function(thrs.criteria = 0.05,
-                                            beta.file = "test/betamatrix_test.txt",
-                                            ewas.list.path = "test/sumstats/",
+                                            beta.file = "",
+                                            ewas.list.path = "",
                                             missingness = 0.2,
                                             path = getwd()){
 
