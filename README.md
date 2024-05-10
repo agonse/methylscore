@@ -31,7 +31,7 @@ To install the `methylscore` package, use the following R command:
 
 ```r
 # Install directly from GitHub
-devtools::install_github("alexgonse-farmaco/methylscore")
+devtools::install_github("agonse/methylscore")
 ```
 
 ## Testing
