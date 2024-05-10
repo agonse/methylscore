@@ -2,8 +2,5 @@
 
 export(calculate_episcore)
 export(calculate_multiple_episcores)
-import(data.table)
+import(dplyr)
 import(readxl)
-importFrom(dplyr,between)
-importFrom(dplyr,first)
-importFrom(dplyr,last)
