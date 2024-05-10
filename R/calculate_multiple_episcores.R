@@ -30,6 +30,7 @@ calculate_multiple_episcores <- function(thrs.criteria = 0.05,
 
   epi <- data.frame(id = colnames(beta)[-1])  # Assuming 'beta' is already a data.frame
 
+  all_logs <- character()
   for (file in sumstatslist) {
     tryCatch({
       epi0 <- calculate_episcore(thrs.criteria, beta.file = beta.file, ewas.file = file, missingness = missingness, path = path)
