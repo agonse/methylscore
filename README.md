@@ -1,6 +1,6 @@
 # Methylscore
 
-The **Methylscore** repository contains R functions designed to calculate specific signatures in DNA methylation. These functions allow researchers to create epigenetic scores that estimate the effects of various factors, such as environmental influences or disorders, on DNA methylation patterns.
+The **Methylscore** repository contains R functions designed to calculate specific signatures in DNA methylation. These functions allow researchers to create epigenetic profile scores (MPS) that estimate the aassociation of environmental factors and health conditions on DNA methylation patterns.
 
 ## Description
 
