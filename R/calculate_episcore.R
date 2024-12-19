@@ -17,7 +17,7 @@
 calculate_episcore <- function(thrs.criteria = 0.05,
                                beta.file = "",
                                ewas.file = "",
-                               missingness = 0.2,
+                               missingness = 0.2, {
   
   
   message("╔══════════════════════════════════════════════════════════════╗")
