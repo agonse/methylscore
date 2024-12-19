@@ -17,7 +17,7 @@
 calculate_episcore <- function(thrs.criteria = 0.05,
                                beta.file = "",
                                ewas.file = "",
-                               missingness = 0.2, {  
+                               missingness = 0.2) {  
   
   start_time <- Sys.time()
   episcore_name <- tools::file_path_sans_ext(basename(ewas.file))     
