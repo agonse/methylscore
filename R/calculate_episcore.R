@@ -26,7 +26,7 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   message("═= Step 1: beta matrix and load summary statistic file")
 
   start_time <- Sys.time()
-  episcore_name <- tools::file_path_sans_ext(basename(ewas.file))                             
+  episcore_name <- tools::file_path_sans_ext(basename(ewas.file))                        
                                
   file_ext <- tools::file_ext(ewas.file)
   ewas_data <- if (file_ext == "xlsx") {
@@ -36,6 +36,7 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   }
   message("      Reading summary statistics .", file_ext, " file... Done!")
   message("      p value thresholding is set at ", thrs.criteria)
+                               
   message("      Maximum p value provided by EWAS summary statistics is ", max(ewas_data$p),"\n")
   if (max(ewas_data$p)<thrs.criteria){
     message("      **CAUTION** Your thresholding criteria may include CpGs not provided by the EWAS summary statistics")
@@ -49,7 +50,7 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   }
   
   if ("data.table" %in% class(beta)) {
-    setDF(beta) #Convert beta to data.frame
+    setDF(beta)
   }
   
   beta_filtered <- beta.file[beta.file$cpg %in% selected_cpgs$cpg, ]
@@ -58,21 +59,18 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   if (nrow(beta_filtered) < (1 - missingness) * nrow(selected_cpgs)) {
     message("      **CAUTION** Missingness in the beta matrix above ", missingness)
   }
-  
-  message("      CpG selection... Ready!\n")
+    message("      CpG selection... Ready!\n")
   
   message("═= Step 3: epigenetic score calculation")
   
   valid_indices <- which(selected_cpgs$cpg %in% beta_filtered$cpg)
   scores <- colSums(beta_filtered[-1] * scale(as.numeric(selected_cpgs$beta[valid_indices])))
-  
   message("      Epigenetic score calculation complete\n")
   
   episcore <- setNames(data.frame(scores), episcore_name)
   
   end_time <- Sys.time()
   elapsed <- difftime(end_time, start_time, units = "secs")
-  
   
   message("═= Step 4: creating log file")
   
