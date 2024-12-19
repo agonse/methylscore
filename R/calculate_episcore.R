@@ -21,23 +21,12 @@ calculate_episcore <- function(thrs.criteria = 0.05,
                                path = getwd()) {
 
   start_time <- Sys.time()
+  episcore_name <- tools::file_path_sans_ext(basename(ewas.file))
 
   message("╔══════════════════════════════════════════════════════════════╗")
   message("║                  calculate.episcore START                    ║")
   message("╚══════════════════════════════════════════════════════════════╝")
   message("═= Step 1: beta matrix and load summary statistic file")
-
-  episcore_name <- tools::file_path_sans_ext(basename(ewas.file))
-  full_path <- file.path(path, ewas.file)
-
-  file_ext <- tools::file_ext(beta.file)
-  beta <- if (file_ext == "xlsx") {
-    read_xlsx(beta.file, col_names = TRUE)
-  } else {
-    read.table(beta.file, header = TRUE)
-  }
-  message("      Reading beta matrix .", file_ext, " file... Done!")
-
 
   file_ext <- tools::file_ext(ewas.file)
   ewas_data <- if (file_ext == "xlsx") {
@@ -47,7 +36,6 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   }
   message("      Reading summary statistics .", file_ext, " file... Done!")
   message("      p value thresholding is set at ", thrs.criteria)
-
   message("      Maximum p value provided by EWAS summary statistics is ", max(ewas_data$p),"\n")
   if (max(ewas_data$p)<thrs.criteria){
     message("      **CAUTION** Your thresholding criteria may include CpGs not provided by the EWAS summary statistics")
@@ -60,6 +48,10 @@ calculate_episcore <- function(thrs.criteria = 0.05,
     stop("No CpGs meet the threshold criteria.")
   }
 
+    if ("data.table" %in% class(beta)) {
+    setDF(beta) #Convert beta to data.frame
+  }
+
   beta_filtered <- beta[beta$cpg %in% selected_cpgs$cpg, ]
   beta_filtered <- na.omit(beta_filtered)
 
@@ -69,9 +61,7 @@ calculate_episcore <- function(thrs.criteria = 0.05,
 
   message("      CpG selection... Ready!\n")
 
-
   message("═= Step 3: epigenetic score calculation")
-  message("      ", episcore_name, " episcore will be calculated\n")
 
   valid_indices <- which(selected_cpgs$cpg %in% beta_filtered$cpg)
   scores <- colSums(beta_filtered[-1] * scale(as.numeric(selected_cpgs$beta[valid_indices])))
@@ -93,11 +83,12 @@ calculate_episcore <- function(thrs.criteria = 0.05,
     "Number of CpG in beta file: ", nrow(beta), "\n",
     "Number of CpG in EWAS summary statistics: ", nrow(ewas_data), "\n",
     "Number of CpGs after p-value thresholding: ", nrow(selected_cpgs), "\n",
-    "CpG missingness ", round(((nrow(ewas_data))-nrow(beta_filtered)/nrow(ewas_data))/100,2),"%", "\n",
+    "CpG missingness ", round(nrow(beta_filtered)/nrow(ewas_data)*100,2), "\n",
     "\n",
     "Time elapsed ", elapsed, "seconds"
   )
-  writeLines(log_message, con = paste0(episcore_name, ".log"))
+  log_path <- file.path(log_dir, paste0(episcore_name, ".log"))
+  writeLines(log_message, con = log_path)
 
   message("      log file created\n")
 
