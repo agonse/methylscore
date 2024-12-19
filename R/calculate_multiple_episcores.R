@@ -17,11 +17,10 @@
 calculate_multiple_episcores <- function(thrs.criteria = 0.05,
                                             beta.file = "",
                                             ewas.list.path = "",
-                                            missingness = 0.2,
-                                            path = getwd()){
+                                            missingness = 0.2){
 
-  if (!file.exists(beta.file)) stop("Beta file does not exist.")
-  if (!dir.exists(ewas.dir)) stop("EWAS directory does not exist.")
+  if (!exists("beta.file")) stop("Beta file does not exist.")
+  if (!dir.exists(ewas.list.path)) stop("EWAS directory does not exist.")
   
   sumstatslist <- list.files(ewas.list.path, full.names = T, pattern = "\\.txt$|\\.xlsx$")
   epi <- data.frame(id = colnames(beta.file)[-1])
@@ -32,8 +31,7 @@ calculate_multiple_episcores <- function(thrs.criteria = 0.05,
       epi0 <- calculate_episcore(thrs.criteria = thrs.criteria,
                                  beta.file = beta.file,
                                  ewas.file = file,
-                                 missingness = missingness,
-                                 path = path)
+                                 missingness = missingness)
       epi <- cbind(epi, setNames(epi0, tools::file_path_sans_ext(basename(file))))
     }, error = function(e) {
       error_log <- paste("Failed to process", basename(file), ":", e$message, "\n")
@@ -41,7 +39,8 @@ calculate_multiple_episcores <- function(thrs.criteria = 0.05,
     })
   }
 
-  # Save all error logs to a single file
-  writeLines(all_logs, file.path(path, "error.log"))
+  if (length(all_logs) > 0) {
+    writeLines(all_logs, file.path(path, "error.log"))
+  }
   return(epi)
 }
