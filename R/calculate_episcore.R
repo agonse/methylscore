@@ -17,17 +17,16 @@
 calculate_episcore <- function(thrs.criteria = 0.05,
                                beta.file = "",
                                ewas.file = "",
-                               missingness = 0.2, {
+                               missingness = 0.2, {  
   
-  
+  start_time <- Sys.time()
+  episcore_name <- tools::file_path_sans_ext(basename(ewas.file))     
+                                 
   message("╔══════════════════════════════════════════════════════════════╗")
   message("║                  calculate.episcore START                    ║")
   message("╚══════════════════════════════════════════════════════════════╝")
-  message("═= Step 1: beta matrix and load summary statistic file")
-
-  start_time <- Sys.time()
-  episcore_name <- tools::file_path_sans_ext(basename(ewas.file))                        
-                               
+  message("═= Step 1: beta matrix and load summary statistic file")                 
+                             
   file_ext <- tools::file_ext(ewas.file)
   ewas_data <- if (file_ext == "xlsx") {
     read_xlsx(ewas.file, col_names = TRUE)
