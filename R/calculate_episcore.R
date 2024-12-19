@@ -18,16 +18,15 @@ calculate_episcore <- function(thrs.criteria = 0.05,
                                beta.file = "",
                                ewas.file = "",
                                missingness = 0.2,
-                               path = getwd()) {
-
+  
   start_time <- Sys.time()
   episcore_name <- tools::file_path_sans_ext(basename(ewas.file))
-
+  
   message("╔══════════════════════════════════════════════════════════════╗")
   message("║                  calculate.episcore START                    ║")
   message("╚══════════════════════════════════════════════════════════════╝")
   message("═= Step 1: beta matrix and load summary statistic file")
-
+  
   file_ext <- tools::file_ext(ewas.file)
   ewas_data <- if (file_ext == "xlsx") {
     read_xlsx(ewas.file, col_names = TRUE)
@@ -41,57 +40,58 @@ calculate_episcore <- function(thrs.criteria = 0.05,
     message("      **CAUTION** Your thresholding criteria may include CpGs not provided by the EWAS summary statistics")
     message("      Some CpGs may not be included in the episcore\n")
   }
-
+  
   message("═= Step 2: CpG selection")
   selected_cpgs <- dplyr::filter(ewas_data, p <= thrs.criteria)
   if (nrow(selected_cpgs) == 0) {
     stop("No CpGs meet the threshold criteria.")
   }
-
-    if ("data.table" %in% class(beta)) {
+  
+  if ("data.table" %in% class(beta)) {
     setDF(beta) #Convert beta to data.frame
   }
-
-  beta_filtered <- beta[beta$cpg %in% selected_cpgs$cpg, ]
+  
+  beta_filtered <- beta.file[beta.file$cpg %in% selected_cpgs$cpg, ]
   beta_filtered <- na.omit(beta_filtered)
-
+  
   if (nrow(beta_filtered) < (1 - missingness) * nrow(selected_cpgs)) {
     message("      **CAUTION** Missingness in the beta matrix above ", missingness)
   }
-
+  
   message("      CpG selection... Ready!\n")
-
+  
   message("═= Step 3: epigenetic score calculation")
-
+  
   valid_indices <- which(selected_cpgs$cpg %in% beta_filtered$cpg)
   scores <- colSums(beta_filtered[-1] * scale(as.numeric(selected_cpgs$beta[valid_indices])))
-
+  
   message("      Epigenetic score calculation complete\n")
-
+  
   episcore <- setNames(data.frame(scores), episcore_name)
-
+  
   end_time <- Sys.time()
   elapsed <- difftime(end_time, start_time, units = "secs")
-
-
+  
+  
   message("═= Step 4: creating log file")
-
+  
   log_message <- paste0(
     "Episcore Name: ", episcore_name, "\n",
     "\n",
     "Parameters: thrs.criteria = ", thrs.criteria, ", missingness = ", missingness, "\n",
-    "Number of CpG in beta file: ", nrow(beta), "\n",
+    "Number of CpG in beta file: ", nrow(beta.file), "\n",
     "Number of CpG in EWAS summary statistics: ", nrow(ewas_data), "\n",
     "Number of CpGs after p-value thresholding: ", nrow(selected_cpgs), "\n",
+    "Number of overlapping CpGs: ", nrow(beta_filtered), "\n",
     "CpG missingness ", round(nrow(beta_filtered)/nrow(ewas_data)*100,2), "\n",
     "\n",
-    "Time elapsed ", elapsed, "seconds"
+    "Time elapsed ", round(elapsed,2), " seconds"
   )
-  log_path <- file.path(log_dir, paste0(episcore_name, ".log"))
+  log_path <- file.path(getwd(), paste0(episcore_name, ".log"))
   writeLines(log_message, con = log_path)
-
+  
   message("      log file created\n")
-
+  
   message("╔══════════════════════════════════════════════════════════════╗")
   message("║                    calculate.episcore END                    ║")
   message("╚══════════════════════════════════════════════════════════════╝")
