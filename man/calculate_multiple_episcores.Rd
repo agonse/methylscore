@@ -6,10 +6,9 @@
 \usage{
 calculate_multiple_episcores(
   thrs.criteria = 0.05,
-  beta.file = "methylscore/betamatrix_test.txt",
-  ewas.list.path = "methylscore/sumstats_test_multiple/",
-  missingness = 0.2,
-  path = getwd()
+  beta.file = "",
+  ewas.list.path = "",
+  missingness = 0.2
 )
 }
 \arguments{
@@ -17,15 +16,17 @@ calculate_multiple_episcores(
 
 \item{missingness}{Maximum tolerated missing data for CpG sites.}
 
-\item{beta}{Beta from sample CpG.}
+\item{beta}{A preloaded beta matrix (data.frame) with CpG methylation values.}
 
-\item{ewas.file}{Path and name to the list of EWAS files.}
+\item{ewas.file}{Path to the directory of EWAS files.}
+
+\item{path}{Directory to save log files.}
 }
 \value{
-The calculated episcore.
+A data.frame with calculated episcores for all EWAS files.
 }
 \description{
-This function calculates multiple epigenetic score based on methylation data. Two inputs are required: a beta matrix with CpG methylation and a list of external references with the association and effect values for each CpG
+This function calculates multiple epigenetic score based on methylation data. It requires a beta matrix and a directory containing EWAS files.
 }
 \details{
 This function calculates multiple epigenetic scores using methylation information.
