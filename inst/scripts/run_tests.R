@@ -9,7 +9,7 @@ sumstats_path <- system.file("extdata", "sumstats", "sumstats_test.txt", package
 episcore <- calculate_episcore(
     thrs.criteria = 0.05,
     beta = beta_path,
-    ewas.file = sumstats_path,
+    ewas.path.file = sumstats_path,
     missingness = 0.2
 )
 
