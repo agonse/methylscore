@@ -6,16 +6,15 @@
 \usage{
 calculate_episcore(
   thrs.criteria = 0.05,
-  beta.file = "methylscore/betamatrix_test.txt",
-  ewas.file = "methylscore/sumstats_test.txt",
-  missingness = 0.2,
-  path = getwd()
+  beta.file = "",
+  ewas.path.file = "",
+  missingness = 0.2
 )
 }
 \arguments{
 \item{thrs.criteria}{Thresholding criteria for CpG selection.}
 
-\item{ewas.file}{Path and name to the EWAS file.}
+\item{ewas.path.file}{Path and name to the EWAS file.}
 
 \item{missingness}{Maximum tolerated missing data for CpG sites.}
 
