@@ -27,11 +27,14 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   message("╚══════════════════════════════════════════════════════════════╝")
   message("═= Step 1: beta matrix and load summary statistic file")                 
   
+  if (!exists("beta.file")) stop("Beta file does not exist.")
+  if (!dir.exists(ewas.list.path)) stop("EWAS directory does not exist.")
+  
   file_ext <- tools::file_ext(ewas.path.file)
   ewas_data <- if (!is.character(ewas.path.file)) {
     stop(paste(
       "Error: You must specify the full path and file name with extension.",
-      "For example: your/ewas/sumstas/path/sumstats.extension",
+      "For example: your/ewas/sumstats/path/sumstats.extension",
       sep = "\n"
     ))
   } else if (file_ext == "xlsx") {
@@ -123,3 +126,5 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   message("╚══════════════════════════════════════════════════════════════╝")
   return(episcore)
 }
+
+  
