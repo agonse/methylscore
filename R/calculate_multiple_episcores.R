@@ -15,12 +15,19 @@
 #' @export
 #'
 calculate_multiple_episcores <- function(thrs.criteria = 0.05,
-                                            beta.file = "",
-                                            ewas.list.path = "",
-                                            missingness = 0.2){
-
-  if (!exists("beta.file")) stop("Beta file does not exist.")
-  if (!dir.exists(ewas.list.path)) stop("EWAS directory does not exist.")
+                                         beta.file = "",
+                                         ewas.list.path = "",
+                                         missingness = 0.2){
+  
+  if (!exists("beta.file")) stop("Error: Beta file does not exist.")
+  if (!dir.exists(ewas.list.path)) stop("Error: EWAS directory does not exist.")
+  if (!is.character(ewas.list.path)) {
+    stop(paste(
+      "Error: You must specify the full path containing all EWAS summary statistic files.",
+      "For example: /your/ewas/summary/statistics/folder/",
+      sep = "\n"
+    ))
+  }
   
   sumstatslist <- list.files(ewas.list.path, full.names = T, pattern = "\\.txt$|\\.xlsx$")
   epi <- data.frame(id = colnames(beta.file)[-1])
@@ -30,7 +37,7 @@ calculate_multiple_episcores <- function(thrs.criteria = 0.05,
     tryCatch({
       epi0 <- calculate_episcore(thrs.criteria = thrs.criteria,
                                  beta.file = beta.file,
-                                 ewas.file = file,
+                                 ewas.path.file = file,
                                  missingness = missingness)
       epi <- cbind(epi, setNames(epi0, tools::file_path_sans_ext(basename(file))))
     }, error = function(e) {
@@ -38,7 +45,7 @@ calculate_multiple_episcores <- function(thrs.criteria = 0.05,
       all_logs <- c(all_logs, error_log)
     })
   }
-
+  
   if (length(all_logs) > 0) {
     writeLines(all_logs, file.path(path, "error.log"))
   }
