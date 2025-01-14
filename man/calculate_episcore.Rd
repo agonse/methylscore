@@ -14,17 +14,17 @@ calculate_episcore(
 \arguments{
 \item{thrs.criteria}{Thresholding criteria for CpG selection.}
 
-\item{ewas.path.file}{Path and name to the EWAS file.}
+\item{beta.file}{Beta from sample CpG.}
 
-\item{missingness}{Maximum tolerated missing data for CpG sites.}
+\item{ewas.path.file}{Path, name and extension of EWAS file.}
 
-\item{beta}{Beta from sample CpG.}
+\item{missingness}{Maximum tolerated missing data for CpG sites. Violation of this criteria will not interrupt the process.}
 }
 \value{
 The calculated episcore.
 }
 \description{
-This function calculates an epigenetic score based on methylation data. Two inputs are required: a beta matrix with CpG methylation and an external reference with the association and effect values for each CpG
+This function calculates an epigenetic score based on methylation data. Two inputs are required: a beta matrix with CpG methylation and an external reference with the association and effect values for each CpG.
 }
 \details{
 This function calculates one epigenetic score using methylation information.
