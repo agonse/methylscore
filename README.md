@@ -1,5 +1,9 @@
 # Methylscore
 
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14652220.svg)](https://doi.org/10.5281/zenodo.14652220)
+
+
 The **Methylscore** repository contains R functions designed to calculate specific signatures in DNA methylation. These functions allow researchers to create epigenetic profile scores (MPS) that estimate the aassociation of environmental factors and health conditions on DNA methylation patterns.
 
 ## Description
