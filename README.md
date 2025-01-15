@@ -1,4 +1,4 @@
-# Methylscore
+# methylscore
 
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14652220.svg)](https://doi.org/10.5281/zenodo.14652220)
@@ -48,6 +48,16 @@ To run the test script, use the following commands in R:
 source(system.file("scripts", "run_tests.R", package = "methylscore"))
 ```
 
+## Citation
+If you use **methylscore** in your research, please cite it as follows:
+
+Gonzalez Segura A. methylscore: epigenetic score calculation tool
+## Citation
+If you use **methylscore** in your research, please cite it as follows:
+
+Gonzalez Segura A. methylscore: epigenetic score calculation tool
+
+By citing methylscore, you acknowledge the work and effort that went into developing this software and help others discover it.
 
 ## Contact
 If you have any questions, please contact agonzalezsegura@ub.edu
