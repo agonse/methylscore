@@ -48,7 +48,7 @@ source(system.file("scripts", "run_tests.R", package = "methylscore"))
 ## Citation
 If you use **methylscore** in your research, please cite it as follows:
 
-> Segura AG. methylscore: epigenetic score calculation tool. Zenodo. [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14652220.svg)](https://doi.org/10.5281/zenodo.14652220)
+> Segura, A. G. (2025). methylscore: epigenetic score calculation tool (v1.0). Zenodo. https://doi.org/10.5281/zenodo.14652220
 
 By citing methylscore, you acknowledge the work and effort that went into developing this software and help others discover it.
 
