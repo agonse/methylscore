@@ -55,7 +55,7 @@ Gonzalez Segura A. methylscore: epigenetic score calculation tool
 ## Citation
 If you use **methylscore** in your research, please cite it as follows:
 
-Gonzalez Segura A. methylscore: epigenetic score calculation tool
+> Gonzalez Segura A. methylscore: epigenetic score calculation tool
 
 By citing methylscore, you acknowledge the work and effort that went into developing this software and help others discover it.
 
