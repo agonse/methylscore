@@ -7,12 +7,11 @@
 #' @import readxl
 #' @import dplyr
 #' @param thrs.criteria Thresholding criteria for CpG selection.
-#' @param beta A preloaded beta matrix (data.frame) with CpG methylation values.
-#' @param ewas.file Path to the directory of EWAS files.
+#' @param beta.file A preloaded beta matrix (data.frame) with CpG methylation values.
+#' @param ewas.list.path Path to the directory of EWAS files.
 #' @param missingness Maximum tolerated missing data for CpG sites.
-#' @param path Directory to save log files.
 #' @return A data.frame with calculated episcores for all EWAS files.
-#' @export
+#' @exportewas.list.pathewas.list.path
 #'
 calculate_multiple_episcores <- function(thrs.criteria = 0.05,
                                          beta.file = "",
