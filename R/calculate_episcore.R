@@ -8,7 +8,7 @@
 #' @import readxl
 #' @import dplyr
 #' @param thrs.criteria Thresholding criteria for CpG selection.
-#' @param beta Beta from sample CpG.
+#' @param beta.file Beta from sample CpG.
 #' @param ewas.path.file Path and name to the EWAS file.
 #' @param missingness Maximum tolerated missing data for CpG sites.
 #' @return The calculated episcore.
@@ -28,7 +28,7 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   message("═= Step 1: beta matrix and load summary statistic file")                 
   
   if (!exists("beta.file")) stop("Error: Beta file does not exist.")
-  if (!dir.exists(ewas.list.path)) stop("Error: EWAS directory does not exist.")
+  if (!dir.exists(ewas.path.file)) stop("Error: EWAS directory does not exist.")
   
   file_ext <- tools::file_ext(ewas.path.file)
   ewas_data <- if (!is.character(ewas.path.file)) {
