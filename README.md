@@ -53,4 +53,5 @@ If you use **methylscore** in your research, please cite it as follows:
 By citing methylscore, you acknowledge the work and effort that went into developing this software and help others discover it.
 
 ## Contact
-If you have any questions, please contact agonzalezsegura@ub.edu
+If you have any questions, please contact alex.gonzalez@vhir.org
+
