@@ -11,9 +11,9 @@ ewas_file  <- basename(sumstats_full)
 # Example 1: calculating a single methylation profile score
 episcore <- calculate_episcore(
     thrs.criteria = 0.05,
-    beta.file = beta_path,
-    ewas.path = sumstats_path,
-    ewas.file = sumstats_file,
+    beta.file = beta_file,
+    ewas.path = ewas_path,
+    ewas.file = ewas_file,
     missingness = 0.2
 )
 
