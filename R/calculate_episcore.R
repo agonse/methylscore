@@ -42,10 +42,11 @@ calculate_episcore <- function(thrs.criteria = 0.05,
       )
     }
   
+  ewas_full_path=paste0(ewas.path,"/",ewas.file)
   ewas_data <- if (file_ext == "xlsx") {
     readxl::read_xlsx(ewas_full_path, col_names = TRUE)
   } else {
-  read.table(ewas_full_path, header = TRUE)
+  data.table::fread(ewas_full_path, header = TRUE)
   }
 
   message("      Reading summary statistics .", file_ext, " file... Done!")
