@@ -23,7 +23,7 @@ print(episcore)
 # Example 2: calculating a multiple methylation profile score
 episcore_multiple <- calculate_multiple_episcores(
     thrs.criteria = 0.05,
-    beta.file = beta_path,
+    beta.file = beta_file,
     ewas.list.path = ewas_path,
     missingness = 0.2
 )
