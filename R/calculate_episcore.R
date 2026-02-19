@@ -9,39 +9,45 @@
 #' @import dplyr
 #' @param thrs.criteria Thresholding criteria for CpG selection.
 #' @param beta.file Beta from sample CpG.
-#' @param ewas.path.file Path and name to the EWAS file.
+#' @param ewas.path Path to the EWAS file.
+#' @param ewas.file EWAS file.
 #' @param missingness Maximum tolerated missing data for CpG sites.
 #' @return The calculated episcore.
 #' @export
 #'
 calculate_episcore <- function(thrs.criteria = 0.05,
                                beta.file = "",
-                               ewas.path.file = "",
+                               ewas.path = "",
+                               ewas.file = "",
                                missingness = 0.2) {  
   
   start_time <- Sys.time()
-  episcore_name <- tools::file_path_sans_ext(basename(ewas.path.file))     
+  episcore_name <- tools::file_path_sans_ext(ewas.file)   
   
   message("╔══════════════════════════════════════════════════════════════╗")
   message("║                  calculate.episcore START                    ║")
   message("╚══════════════════════════════════════════════════════════════╝")
   message("═= Step 1: beta matrix and load summary statistic file")                 
   
-  if (!exists("beta.file")) stop("Error: Beta file does not exist.")
-  if (!dir.exists(ewas.path.file)) stop("Error: EWAS directory does not exist.")
+  if (length(beta.file) == 0 || !file.exists(beta.file)) stop("Error: Beta file does not exist.")
+  if (!dir.exists(ewas.path)) stop("Error: EWAS directory does not exist.")
+  if (!exists("ewas.file")) stop("Error: EWAS file does not exist.")
   
-  file_ext <- tools::file_ext(ewas.path.file)
-  ewas_data <- if (!is.character(ewas.path.file)) {
+  file_ext <- tools::file_ext(ewas.file)
+  ewas_data <- if (!is.character(ewas.path) | !is.character(ewas.file)) {
     stop(paste(
       "Error: You must specify the full path and file name with extension.",
       "For example: your/ewas/sumstats/folder/sumstats.txt",
-      sep = "\n"
-    ))
-  } else if (file_ext == "xlsx") {
-    read_xlsx(ewas.path.file, col_names = TRUE)
+      sep = "\n")
+      )
+    }
+  
+  ewas_data <- if (file_ext == "xlsx") {
+    readxl::read_xlsx(ewas_full_path, col_names = TRUE)
   } else {
-    read.table(ewas.path.file, header = TRUE)
+  read.table(ewas_full_path, header = TRUE)
   }
+
   message("      Reading summary statistics .", file_ext, " file... Done!")
   message("      p value thresholding is set at ", thrs.criteria)
   
@@ -64,7 +70,8 @@ calculate_episcore <- function(thrs.criteria = 0.05,
     setDF(beta)
   }
   
-  beta_filtered <- beta.file[beta.file$cpg %in% selected_cpgs$cpg, ]
+  beta_matrix <- data.table::fread(beta.file)
+  beta_filtered <- beta_matrix[beta_matrix$cpg %in% selected_cpgs$cpg, ]
   beta_filtered <- na.omit(beta_filtered)
   
   if ((nrow(beta_filtered)/nrow(selected_cpgs)) > missingness) {
