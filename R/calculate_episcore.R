@@ -8,7 +8,7 @@
 #' @import readxl
 #' @import dplyr
 #' @param thrs.criteria Thresholding criteria for CpG selection.
-#' @param beta.file Beta from sample CpG.
+#' @param beta.file Beta matrix from sample CpG.
 #' @param ewas.path Path to the EWAS file.
 #' @param ewas.file EWAS file.
 #' @param missingness Maximum tolerated missing data for CpG sites.
