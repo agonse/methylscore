@@ -18,26 +18,17 @@ calculate_multiple_episcores <- function(thrs.criteria = 0.05,
                                          ewas.list.path = "",
                                          missingness = 0.2){
   
-  if (!exists("beta.file")) stop("Error: Beta file does not exist.")
   if (!dir.exists(ewas.list.path)) stop("Error: EWAS directory does not exist.")
-  if (!is.character(ewas.list.path)) {
-    stop(paste(
-      "Error: You must specify the full path containing all EWAS summary statistic files.",
-      "For example: /your/ewas/summary/statistics/folder/",
-      sep = "\n"
-    ))
-  }
-  
+
   sumstatslist <- list.files(ewas.list.path, full.names = T, pattern = "\\.txt$|\\.xlsx$")
   
-  beta_matrix <- as.data.table(beta.file)
-  epi <- data.frame(id = colnames(beta_matrix)[-1])
+  epi <- data.frame(id = colnames(beta.file)[-1])
   all_logs <- character()
   
   for (file in sumstatslist) {
     tryCatch({
       epi0 <- calculate_episcore(thrs.criteria = thrs.criteria,
-                                 beta.file = paste0(dirname(beta.file),"/",basename(basenamebeta.file)),
+                                 beta.file = beta.file,
                                  ewas.path = ewas.list.path,
                                  ewas.file = basename(file),
                                  missingness = missingness)
