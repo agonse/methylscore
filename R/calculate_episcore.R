@@ -29,7 +29,6 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   message("╚══════════════════════════════════════════════════════════════╝")
   message("═= Step 1: beta matrix and load summary statistic file")                 
   
-  if (length(beta.file) == 0 || !file.exists(beta.file)) stop("Error: Beta file does not exist.")
   if (!dir.exists(ewas.path)) stop("Error: EWAS directory does not exist.")
   if (!exists("ewas.file")) stop("Error: EWAS file does not exist.")
   
@@ -39,16 +38,16 @@ calculate_episcore <- function(thrs.criteria = 0.05,
       "Error: You must specify the full path and file name with extension.",
       "For example: your/ewas/sumstats/folder/sumstats.txt",
       sep = "\n")
-      )
-    }
+    )
+  }
   
   ewas_full_path=paste0(ewas.path,"/",ewas.file)
   ewas_data <- if (file_ext == "xlsx") {
     readxl::read_xlsx(ewas_full_path, col_names = TRUE)
   } else {
-  data.table::fread(ewas_full_path, header = TRUE)
+    data.table::fread(ewas_full_path, header = TRUE)
   }
-
+  
   message("      Reading summary statistics .", file_ext, " file... Done!")
   message("      p value thresholding is set at ", thrs.criteria)
   
@@ -71,7 +70,7 @@ calculate_episcore <- function(thrs.criteria = 0.05,
     setDF(beta)
   }
   
-  beta_matrix <- data.table::fread(beta.file)
+  beta_matrix <- as.data.table(beta.file)
   beta_filtered <- beta_matrix[beta_matrix$cpg %in% selected_cpgs$cpg, ]
   beta_filtered <- na.omit(beta_filtered)
   
@@ -101,7 +100,7 @@ calculate_episcore <- function(thrs.criteria = 0.05,
     dir.create(logs_dir)
   }
   log_path <- file.path(logs_dir, paste0(episcore_name, ".log"))
-
+  
   log_message <- paste0(
     episcore_name, " calculaton Log\n",
     "=========================\n",
