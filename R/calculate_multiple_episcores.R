@@ -29,16 +29,16 @@ calculate_multiple_episcores <- function(thrs.criteria = 0.05,
   }
   
   sumstatslist <- list.files(ewas.list.path, full.names = T, pattern = "\\.txt$|\\.xlsx$")
-
-  beta_matrix <- data.table::fread(beta.file) 
+  
+  beta_matrix <- as.data.table(beta.file)
   epi <- data.frame(id = colnames(beta_matrix)[-1])
   all_logs <- character()
   
   for (file in sumstatslist) {
     tryCatch({
       epi0 <- calculate_episcore(thrs.criteria = thrs.criteria,
-                                 beta.file = beta.file,
-                                 ewas.path = dirname(file),
+                                 beta.file = paste0(dirname(beta.file),"/",basename(basenamebeta.file)),
+                                 ewas.path = ewas.list.path,
                                  ewas.file = basename(file),
                                  missingness = missingness)
       episcore_name=tools::file_path_sans_ext(basename(file))
