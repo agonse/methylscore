@@ -30,17 +30,9 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   message("═= Step 1: beta matrix and load summary statistic file")                 
   
   if (!dir.exists(ewas.path)) stop("Error: EWAS directory does not exist.")
-  if (!exists("ewas.file")) stop("Error: EWAS file does not exist.")
-  
+
   file_ext <- tools::file_ext(ewas.file)
-  ewas_data <- if (!is.character(ewas.path) | !is.character(ewas.file)) {
-    stop(paste(
-      "Error: You must specify the full path and file name with extension.",
-      "For example: your/ewas/sumstats/folder/sumstats.txt",
-      sep = "\n")
-    )
-  }
-  
+
   ewas_full_path=paste0(ewas.path,"/",ewas.file)
   ewas_data <- if (file_ext == "xlsx") {
     readxl::read_xlsx(ewas_full_path, col_names = TRUE)
@@ -61,20 +53,16 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   }
   
   message("═= Step 2: CpG selection")
-  selected_cpgs <- dplyr::filter(ewas_data, p <= thrs.criteria)
+  selected_cpgs <- dplyr::filter(ewas_data, p < thrs.criteria)
   if (nrow(selected_cpgs) == 0) {
     stop("No CpGs meet the threshold criteria.")
   }
-  
-  if ("data.table" %in% class(beta)) {
-    setDF(beta)
-  }
-  
-  beta_matrix <- as.data.table(beta.file)
-  beta_filtered <- beta_matrix[beta_matrix$cpg %in% selected_cpgs$cpg, ]
+
+  beta_dt <- as.data.table(beta.file)
+  beta_filtered <- beta_dt[beta_dt$cpg %in% selected_cpgs$cpg, ]
   beta_filtered <- na.omit(beta_filtered)
   
-  if ((nrow(beta_filtered)/nrow(selected_cpgs)) > missingness) {
+  if ((nrow(selected_cpgs)-nrow(beta_filtered))/nrow(selected_cpgs) > missingness) {
     message("      **CAUTION** Missingness in the beta matrix above ", missingness)
     log_message_miss="**CAUTION** Missingness exceeds defined parameter."
   } else {
@@ -85,7 +73,7 @@ calculate_episcore <- function(thrs.criteria = 0.05,
   message("═= Step 3: epigenetic score calculation")
   
   valid_indices <- which(selected_cpgs$cpg %in% beta_filtered$cpg)
-  scores <- colSums(beta_filtered[,-1] * scale(as.numeric(selected_cpgs$beta[valid_indices])))
+  scores <- colSums(beta_filtered[,-1] * as.numeric(selected_cpgs$beta[valid_indices]))
   message("      Epigenetic score calculation complete\n")
   
   episcore <- setNames(data.frame(scores), episcore_name)
