@@ -58,11 +58,10 @@ calculate_episcore <- function(thrs.criteria = 0.05,
     stop("No CpGs meet the threshold criteria.")
   }
 
-  beta_dt <- as.data.table(beta.file)
-  beta_filtered <- beta_dt[beta_dt$cpg %in% selected_cpgs$cpg, ]
+  beta_filtered <- beta.file[beta.file$cpg %in% selected_cpgs$cpg, ]
   beta_filtered <- na.omit(beta_filtered)
   
-  if ((nrow(selected_cpgs)-nrow(beta_filtered))/nrow(selected_cpgs) > missingness) {
+  if ((nrow(beta_filtered))/(nrow(selected_cpgs)) > 1-missingness) {
     message("      **CAUTION** Missingness in the beta matrix above ", missingness)
     log_message_miss="**CAUTION** Missingness exceeds defined parameter."
   } else {
